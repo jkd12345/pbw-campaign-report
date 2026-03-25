@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paris Blockchain Week — Creator Performance</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --surface: #fafafa;
+    --border: #e5e5e5;
+    --border-light: #ececec;
+    --text-primary: #111111;
+    --text-secondary: #666;
+    --text-muted: #999;
+    --white: #111111;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+    --green-bg: rgba(22,163,74,0.08);
+    --amber-bg: rgba(217,119,6,0.08);
+    --red-bg: rgba(220,38,38,0.08);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    padding: 48px 40px;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+
+  .logo-lockup {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .pbw-logo-svg {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 42px;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: #111111;
+    text-transform: uppercase;
+  }
+
+  .logo-text span {
+    display: block;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .header-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  /* ── Summary Cards ── */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .summary-card {
+    background: var(--surface);
+    padding: 20px 24px;
+  }
+
+  .summary-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .summary-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+
+  .summary-value.highlight {
+    color: var(--green);
+  }
+
+  /* ── Table Container ── */
+  .table-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .table-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .sort-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    background: var(--border-light);
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 13px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  thead th.num { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+  td {
+    padding: 15px 16px;
+    vertical-align: middle;
+    font-size: 15px;
+  }
+
+  td.num {
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+
+  /* ── Creator Cell ── */
+  .creator-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 160px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--border-light);
+    flex-shrink: 0;
+    border: 1px solid var(--border-light);
+  }
+
+  .username {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* ── Type Badge ── */
+  .type-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .type-tweet {
+    background: transparent;
+    border: 1px solid #333;
+    color: var(--text-secondary);
+  }
+
+  .type-qrt {
+    background: #1f1f1f;
+    border: 1px solid #3a3a3a;
+    color: #ccc;
+  }
+
+  /* ── Date ── */
+  .date-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* ── Impressions ── */
+  .impressions-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  /* ── Eng Rate Badge ── */
+  .eng-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .eng-green { background: var(--green-bg); color: var(--green); }
+  .eng-amber { background: var(--amber-bg); color: var(--amber); }
+  .eng-red   { background: var(--red-bg);   color: var(--red); }
+
+  /* ── Link ── */
+  .link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: 1px solid var(--border-light);
+    padding: 4px 9px;
+    border-radius: 2px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .link-btn:hover {
+    color: var(--text-primary);
+    border-color: #444;
+  }
+
+  .link-btn svg {
+    width: 10px;
+    height: 10px;
+    opacity: 0.6;
+  }
+
+  /* ── Divider line ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 32px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-lockup">
+    <!-- Paris Blockchain Week Logo (SVG recreation) -->
+    <svg class="pbw-logo-svg" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Top-right square -->
+      <rect x="22" y="2" width="22" height="22" rx="4" fill="#111111" transform="rotate(12 33 13)"/>
+      <!-- Middle-left square -->
+      <rect x="4" y="16" width="22" height="22" rx="4" fill="#111111" transform="rotate(-8 15 27)"/>
+      <!-- Bottom square -->
+      <rect x="20" y="26" width="20" height="20" rx="4" fill="#111111" transform="rotate(4 30 36)"/>
+    </svg>
+    <div class="logo-text">
+      <span>Paris</span>
+      <span>Blockchain</span>
+      <span>Week</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-title">Campaign Performance</div>
+    <div class="header-date">Campaign Report</div>
+    <div class="header-date">Feb &amp; March 2026</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Summary cards populated by JS -->
+<div class="summary-row" id="summaryRow">
+  <div class="summary-card">
+    <div class="summary-label">Total Impressions</div>
+    <div class="summary-value" id="totalImpressions">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Total Engagements</div>
+    <div class="summary-value" id="totalEngagements">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Avg. Eng. Rate</div>
+    <div class="summary-value highlight" id="avgEngRate">—</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Total Posts</div>
+    <div class="summary-value" id="totalPosts">—</div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="table-container">
+  <div class="table-header-bar">
+    <span class="table-label">All Posts</span>
+    <span class="sort-badge">↓ highest impressions first</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Creator</th>
+        <th>Type</th>
+        <th>Date</th>
+        <th class="num">Impressions</th>
+        <th class="num">Likes</th>
+        <th class="num">Reposts</th>
+        <th class="num">Replies</th>
+        <th class="num">Eng. Rate</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<script>
+const data = [
+  {
+    img: "https://pbs.twimg.com/profile_images/1755983593925378048/kYutau0B_400x400.jpg",
+    username: "@Cointelegraph",
+    link: "https://x.com/Cointelegraph/status/2035990047694950875?s=20",
+    type: "Tweet",
+    date: "23 Mar 2026",
+    impressions: 14800, likes: 60, reposts: 14, replies: 29
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/1741174664573902849/luD7tU5P_400x400.jpg",
+    username: "@TedPillows",
+    link: "https://x.com/TedPillows/status/2033967490942820480",
+    type: "Tweet",
+    date: "17 Mar 2026",
+    impressions: 14500, likes: 85, reposts: 4, replies: 19
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/1741174664573902849/luD7tU5P_400x400.jpg",
+    username: "@TedPillows",
+    link: "https://x.com/TedPillows/status/2036465312913056143?s=20",
+    type: "Quote Tweet",
+    date: "24 Mar 2026",
+    impressions: 13400, likes: 58, reposts: 2, replies: 28
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/1470704059078356992/qA2bsspy_400x400.jpg",
+    username: "@F_Gregaard",
+    link: "https://x.com/F_Gregaard/status/2018347711930536226?s=20",
+    type: "Quote Tweet",
+    date: "2 Feb 2026",
+    impressions: 6248, likes: 266, reposts: 28, replies: 6
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/2025517047107510272/UlP5Jfrv_400x400.jpg",
+    username: "@TimHaldorsson",
+    link: "https://x.com/TimHaldorsson/status/2023003342037746014?s=20",
+    type: "Quote Tweet",
+    date: "15 Mar 2026",
+    impressions: 1337, likes: 45, reposts: 2, replies: 19
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/2025517047107510272/UlP5Jfrv_400x400.jpg",
+    username: "@TimHaldorsson",
+    link: "https://x.com/TimHaldorsson/status/2035025375407841729?s=20",
+    type: "Tweet",
+    date: "20 Mar 2026",
+    impressions: 1066, likes: 34, reposts: 3, replies: 11
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/1969783747525386240/Zu1uNJsu_400x400.jpg",
+    username: "@Jackhaldorsson",
+    link: "https://x.com/Jackhaldorsson/status/2036104470740787576?s=20",
+    type: "Tweet",
+    date: "23 Mar 2026",
+    impressions: 511, likes: 18, reposts: 1, replies: 8
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/1369696636604186626/N_FsRnkt_400x400.jpg",
+    username: "@CoinTribuneFR",
+    link: "https://x.com/CoinTribuneFR/status/2032792017756139669",
+    type: "Tweet",
+    date: "14 Mar 2026",
+    impressions: 500, likes: 3, reposts: 0, replies: 1
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/2025517047107510272/UlP5Jfrv_400x400.jpg",
+    username: "@TimHaldorsson",
+    link: "https://x.com/TimHaldorsson/status/2036462612779598024?s=20",
+    type: "Quote Tweet",
+    date: "24 Mar 2026",
+    impressions: 350, likes: 17, reposts: 1, replies: 5
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/2034331393476661248/i4WmnjiA_400x400.jpg",
+    username: "@realcryptoboost",
+    link: "https://x.com/realcryptoboost/status/2036477288586297581?s=20",
+    type: "Quote Tweet",
+    date: "24 Mar 2024",
+    impressions: 178, likes: 2, reposts: 1, replies: 1
+  },
+  {
+    img: "https://pbs.twimg.com/profile_images/2026072822989086720/dWmcfp4s_400x400.jpg",
+    username: "@0xjess",
+    link: "https://x.com/0xjesss/status/2036471208040968414?s=20",
+    type: "Quote Tweet",
+    date: "24 Mar 2024",
+    impressions: 50, likes: 3, reposts: 0, replies: 0
+  }
+];
+
+function fmt(n) {
+  return n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : n.toString();
+}
+
+function engRateClass(rate) {
+  if (rate >= 3) return 'eng-green';
+  if (rate >= 1) return 'eng-amber';
+  return 'eng-red';
+}
+
+// Summary
+let totImp = 0, totEng = 0;
+data.forEach(r => {
+  totImp += r.impressions;
+  totEng += r.likes + r.reposts + r.replies;
+});
+const avgEng = ((totEng / totImp) * 100).toFixed(2);
+
+document.getElementById('totalImpressions').textContent = fmt(totImp);
+document.getElementById('totalEngagements').textContent = fmt(totEng);
+document.getElementById('avgEngRate').textContent = avgEng + '%';
+document.getElementById('totalPosts').textContent = data.length;
+
+// Table
+const tbody = document.getElementById('tableBody');
+data.forEach(row => {
+  const engagements = row.likes + row.reposts + row.replies;
+  const engRate = ((engagements / row.impressions) * 100).toFixed(2);
+  const cls = engRateClass(parseFloat(engRate));
+  const typeCls = row.type === 'Tweet' ? 'type-tweet' : 'type-qrt';
+  const typeLabel = row.type === 'Quote Tweet' ? 'QRT' : 'Post';
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>
+      <div class="creator-cell">
+        <img class="avatar" src="${row.img}" alt="${row.username}" onerror="this.style.background='#2a2a2a';this.src=''">
+        <span class="username">${row.username}</span>
+      </div>
+    </td>
+    <td><span class="type-badge ${typeCls}">${typeLabel}</span></td>
+    <td><span class="date-cell">${row.date}</span></td>
+    <td class="num"><span class="impressions-val">${fmt(row.impressions)}</span></td>
+    <td class="num">${row.likes.toLocaleString()}</td>
+    <td class="num">${row.reposts.toLocaleString()}</td>
+    <td class="num">${row.replies.toLocaleString()}</td>
+    <td class="num"><span class="eng-badge ${cls}">${engRate}%</span></td>
+    <td>
+      <a class="link-btn" href="${row.link}" target="_blank">
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 10L10 2M10 2H5M10 2V7"/>
+        </svg>
+        View
+      </a>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+</script>
+</body>
+</html>
