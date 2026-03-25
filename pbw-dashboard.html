@@ -370,15 +370,14 @@
 <!-- Table -->
 <div class="table-container">
   <div class="table-header-bar">
-    <span class="table-label">All Posts</span>
+    <span class="table-label">All Creators</span>
     <span class="sort-badge">↓ highest impressions first</span>
   </div>
   <table>
     <thead>
       <tr>
         <th>Creator</th>
-        <th>Type</th>
-        <th>Date</th>
+        <th class="num">Posts</th>
         <th class="num">Impressions</th>
         <th class="num">Likes</th>
         <th class="num">Reposts</th>
@@ -392,144 +391,131 @@
 </div>
 
 <script>
-const data = [
+const rawData = [
   {
     img: "https://pbs.twimg.com/profile_images/1741174664573902849/luD7tU5P_400x400.jpg",
     username: "@TedPillows",
-    link: "https://x.com/TedPillows/status/2036465312913056143?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/TedPillows",
     impressions: 17900, likes: 74, reposts: 3, replies: 28
   },
   {
     img: "https://pbs.twimg.com/profile_images/1741174664573902849/luD7tU5P_400x400.jpg",
     username: "@TedPillows",
-    link: "https://x.com/TedPillows/status/2033967490942820480",
-    type: "Tweet",
-    date: "17 Mar 2026",
+    profile: "https://x.com/TedPillows",
     impressions: 14500, likes: 86, reposts: 4, replies: 19
   },
   {
     img: "https://pbs.twimg.com/profile_images/1470704059078356992/qA2bsspy_400x400.jpg",
     username: "@F_Gregaard",
-    link: "https://x.com/F_Gregaard/status/2018347711930536226?s=20",
-    type: "Quote Tweet",
-    date: "2 Feb 2026",
+    profile: "https://x.com/F_Gregaard",
     impressions: 6251, likes: 266, reposts: 28, replies: 6
   },
   {
     img: "https://pbs.twimg.com/profile_images/1939236923232354304/2vGsD6VB_400x400.jpg",
     username: "@AlexandreLaizet",
-    link: "https://x.com/AlexandreLaizet/status/2036541097141555663?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/AlexandreLaizet",
     impressions: 5342, likes: 95, reposts: 19, replies: 10
   },
   {
     img: "https://pbs.twimg.com/profile_images/1976741715617697792/d5qt6lYn_400x400.jpg",
     username: "@gazza_jenks",
-    link: "https://x.com/gazza_jenks/status/2034945518036558055?s=20",
-    type: "Quote Tweet",
-    date: "20 Mar 2026",
+    profile: "https://x.com/gazza_jenks",
     impressions: 1445, likes: 20, reposts: 3, replies: 4
   },
   {
     img: "https://pbs.twimg.com/profile_images/2025517047107510272/UlP5Jfrv_400x400.jpg",
     username: "@TimHaldorsson",
-    link: "https://x.com/TimHaldorsson/status/2023003342037746014?s=20",
-    type: "Quote Tweet",
-    date: "15 Mar 2026",
+    profile: "https://x.com/TimHaldorsson",
     impressions: 1341, likes: 45, reposts: 2, replies: 19
   },
   {
     img: "https://pbs.twimg.com/profile_images/2025517047107510272/UlP5Jfrv_400x400.jpg",
     username: "@TimHaldorsson",
-    link: "https://x.com/TimHaldorsson/status/2035025375407841729?s=20",
-    type: "Tweet",
-    date: "20 Mar 2026",
+    profile: "https://x.com/TimHaldorsson",
     impressions: 1124, likes: 34, reposts: 3, replies: 11
   },
   {
     img: "https://pbs.twimg.com/profile_images/1703265809391669248/W2GR4Q80_400x400.jpg",
     username: "@TCryptomonnaies",
-    link: "https://x.com/TCryptomonnaies/status/2036473754512142412?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/TCryptomonnaies",
     impressions: 748, likes: 12, reposts: 5, replies: 1
   },
   {
     img: "https://pbs.twimg.com/profile_images/2025517047107510272/UlP5Jfrv_400x400.jpg",
     username: "@TimHaldorsson",
-    link: "https://x.com/TimHaldorsson/status/2036462612779598024?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/TimHaldorsson",
     impressions: 586, likes: 19, reposts: 1, replies: 8
   },
   {
     img: "https://pbs.twimg.com/profile_images/1976741715617697792/d5qt6lYn_400x400.jpg",
     username: "@gazza_jenks",
-    link: "https://x.com/gazza_jenks/status/2036463012630896864?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/gazza_jenks",
     impressions: 557, likes: 9, reposts: 0, replies: 1
   },
   {
     img: "https://pbs.twimg.com/profile_images/1969783747525386240/Zu1uNJsu_400x400.jpg",
     username: "@Jackhaldorsson",
-    link: "https://x.com/Jackhaldorsson/status/2036104470740787576?s=20",
-    type: "Tweet",
-    date: "23 Mar 2026",
+    profile: "https://x.com/Jackhaldorsson",
     impressions: 542, likes: 18, reposts: 1, replies: 8
   },
   {
     img: "https://pbs.twimg.com/profile_images/2034331393476661248/i4WmnjiA_400x400.jpg",
     username: "@realcryptoboost",
-    link: "https://x.com/realcryptoboost/status/2036477288586297581?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/realcryptoboost",
     impressions: 295, likes: 3, reposts: 1, replies: 1
   },
   {
     img: "https://pbs.twimg.com/profile_images/1969783747525386240/Zu1uNJsu_400x400.jpg",
     username: "@Jackhaldorsson",
-    link: "https://x.com/Jackhaldorsson/status/2036557230795854210?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/Jackhaldorsson",
     impressions: 250, likes: 12, reposts: 1, replies: 3
   },
   {
     img: "https://pbs.twimg.com/profile_images/2012429174535790592/w8PFwblA_400x400.png",
     username: "@mozaiiic",
-    link: "https://x.com/mozaiiic/status/2034249082814808070?s=20",
-    type: "Tweet",
-    date: "18 Mar 2026",
+    profile: "https://x.com/mozaiiic",
     impressions: 116, likes: 4, reposts: 0, replies: 0
   },
   {
     img: "https://pbs.twimg.com/profile_images/2026072822989086720/dWmcfp4s_400x400.jpg",
     username: "@0xjess",
-    link: "https://x.com/0xjesss/status/2036471208040968414?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/0xjesss",
     impressions: 55, likes: 3, reposts: 0, replies: 0
   },
   {
     img: "https://pbs.twimg.com/profile_images/1683930086976651264/lL1ZaPs1_400x400.jpg",
     username: "@EthanPierse",
-    link: "https://x.com/EthanPierse/status/2036805807736504521?s=20",
-    type: "Quote Tweet",
-    date: "25 Mar 2026",
+    profile: "https://x.com/EthanPierse",
     impressions: 55, likes: 0, reposts: 0, replies: 0
   },
   {
     img: "https://pbs.twimg.com/profile_images/1891529295392059393/9qUjjSMB_400x400.jpg",
     username: "@LunarWilliamR",
-    link: "https://x.com/LunarWilliamR/status/2036469648145670216?s=20",
-    type: "Quote Tweet",
-    date: "24 Mar 2026",
+    profile: "https://x.com/LunarWilliamR",
     impressions: 46, likes: 4, reposts: 0, replies: 0
   }
 ];
+
+// Aggregate by creator
+const creatorMap = {};
+rawData.forEach(r => {
+  if (!creatorMap[r.username]) {
+    creatorMap[r.username] = {
+      img: r.img,
+      username: r.username,
+      profile: r.profile,
+      impressions: 0, likes: 0, reposts: 0, replies: 0, posts: 0
+    };
+  }
+  const c = creatorMap[r.username];
+  c.impressions += r.impressions;
+  c.likes += r.likes;
+  c.reposts += r.reposts;
+  c.replies += r.replies;
+  c.posts += 1;
+});
+
+const creators = Object.values(creatorMap).sort((a, b) => b.impressions - a.impressions);
 
 function fmt(n) {
   return n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/,'') + 'K' : n.toString();
@@ -543,7 +529,7 @@ function engRateClass(rate) {
 
 // Summary
 let totImp = 0, totEng = 0;
-data.forEach(r => {
+rawData.forEach(r => {
   totImp += r.impressions;
   totEng += r.likes + r.reposts + r.replies;
 });
@@ -552,16 +538,14 @@ const avgEng = ((totEng / totImp) * 100).toFixed(2);
 document.getElementById('totalImpressions').textContent = fmt(totImp);
 document.getElementById('totalEngagements').textContent = fmt(totEng);
 document.getElementById('avgEngRate').textContent = avgEng + '%';
-document.getElementById('totalPosts').textContent = data.length;
+document.getElementById('totalPosts').textContent = rawData.length;
 
 // Table
 const tbody = document.getElementById('tableBody');
-data.forEach(row => {
+creators.forEach(row => {
   const engagements = row.likes + row.reposts + row.replies;
   const engRate = ((engagements / row.impressions) * 100).toFixed(2);
   const cls = engRateClass(parseFloat(engRate));
-  const typeCls = row.type === 'Tweet' ? 'type-tweet' : 'type-qrt';
-  const typeLabel = row.type === 'Quote Tweet' ? 'QRT' : 'Post';
 
   const tr = document.createElement('tr');
   tr.innerHTML = `
@@ -571,19 +555,18 @@ data.forEach(row => {
         <span class="username">${row.username}</span>
       </div>
     </td>
-    <td><span class="type-badge ${typeCls}">${typeLabel}</span></td>
-    <td><span class="date-cell">${row.date}</span></td>
+    <td class="num">${row.posts}</td>
     <td class="num"><span class="impressions-val">${fmt(row.impressions)}</span></td>
     <td class="num">${row.likes.toLocaleString()}</td>
     <td class="num">${row.reposts.toLocaleString()}</td>
     <td class="num">${row.replies.toLocaleString()}</td>
     <td class="num"><span class="eng-badge ${cls}">${engRate}%</span></td>
     <td>
-      <a class="link-btn" href="${row.link}" target="_blank">
+      <a class="link-btn" href="${row.profile}" target="_blank">
         <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M2 10L10 2M10 2H5M10 2V7"/>
         </svg>
-        View
+        Profile
       </a>
     </td>
   `;
