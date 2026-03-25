@@ -91,7 +91,7 @@
   /* ── Summary Cards ── */
   .summary-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
@@ -365,6 +365,10 @@
     <div class="summary-label">Total Posts</div>
     <div class="summary-value" id="totalPosts">—</div>
   </div>
+  <div class="summary-card">
+    <div class="summary-label">Total Creators</div>
+    <div class="summary-value" id="totalCreators">—</div>
+  </div>
 </div>
 
 <!-- Table -->
@@ -539,6 +543,7 @@ document.getElementById('totalImpressions').textContent = fmt(totImp);
 document.getElementById('totalEngagements').textContent = fmt(totEng);
 document.getElementById('avgEngRate').textContent = avgEng + '%';
 document.getElementById('totalPosts').textContent = rawData.length;
+document.getElementById('totalCreators').textContent = creators.length;
 
 // Table
 const tbody = document.getElementById('tableBody');
